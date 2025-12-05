@@ -66,7 +66,9 @@ export default function ProfileHeader({
           title: `Share ${profile.username}'s profile`,
           url: profileUrl,
         });
-      } catch {}
+      } catch (error) {
+        console.error(error);
+      }
     } else {
       try {
         await navigator.clipboard.writeText(profileUrl);

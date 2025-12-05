@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getMeServer } from '@/lib/api/auth-server';
 import { authClient } from '@/lib/auth-client';
+import type React from 'react';
 
 export interface ServerUser {
   id: string;

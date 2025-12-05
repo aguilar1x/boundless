@@ -142,7 +142,7 @@ export interface HackathonCollaboration {
 }
 
 // Resources Tab Types
-export interface HackathonResource {
+export interface HackathonResourceItem {
   link?: string;
   description?: string;
   fileUrl?: string;
@@ -150,7 +150,7 @@ export interface HackathonResource {
 }
 
 export interface HackathonResources {
-  resources: HackathonResource[];
+  resources: HackathonResourceItem[];
 }
 
 // Complete Hackathon Data Structure
@@ -2192,7 +2192,7 @@ export const reportDiscussion = async (
 // Resources API Types and Functions
 // ============================================
 
-export interface HackathonResource {
+export interface HackathonResourceDocument {
   _id: string;
   title: string;
   type: 'pdf' | 'doc' | 'sheet' | 'slide' | 'link' | 'video';
@@ -2205,10 +2205,10 @@ export interface HackathonResource {
 }
 
 export interface GetHackathonResourcesResponse extends ApiResponse<
-  HackathonResource[]
+  HackathonResourceDocument[]
 > {
   success: true;
-  data: HackathonResource[];
+  data: HackathonResourceDocument[];
   message: string;
 }
 

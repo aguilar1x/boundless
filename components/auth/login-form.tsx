@@ -36,7 +36,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
-      console.log('Attempting login for:', data.email);
+      // console.log('Attempting login for:', data.email);
 
       const { error } = await authClient.signIn.email(
         {
@@ -46,7 +46,7 @@ export function LoginForm({ onSuccess, onError }: LoginFormProps) {
         },
         {
           onSuccess: () => {
-            console.log('Login successful');
+            // console.log('Login successful');
             toast.success('Login successful!');
             onSuccess?.();
           },

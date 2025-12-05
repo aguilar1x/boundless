@@ -113,7 +113,9 @@ export default function MembersTab({ onSave }: MembersTabProps) {
             activeOrg.betterAuthOrgId
           );
           setInvitations(data || []);
-        } catch {}
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
   };
@@ -212,7 +214,9 @@ export default function MembersTab({ onSave }: MembersTabProps) {
       await updateOrganizationMembers(activeOrgId, emails);
       onSave?.(members);
       setHasUserChanges(false);
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

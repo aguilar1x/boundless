@@ -1,11 +1,12 @@
 'use client';
 import Link from 'next/link';
+import React from 'react';
 import {
   Menu,
   Plus,
   Building2,
   ArrowUpRight,
-  User,
+  User as UserIcon,
   LogOut,
   Settings,
   Sparkles,
@@ -456,7 +457,7 @@ const MobileMenu = ({
                         onClick={() => setIsOpen(false)}
                       >
                         <BoundlessButton variant='outline' className='w-full'>
-                          <User className='mr-2 h-4 w-4' />
+                          <UserIcon className='mr-2 h-4 w-4' />
                           Profile
                         </BoundlessButton>
                       </Link>
