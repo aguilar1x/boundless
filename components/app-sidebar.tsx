@@ -70,8 +70,8 @@ const getNavigationData = (counts?: {
       url: '/me/participating',
       icon: IconShieldCheck,
       badge:
-        counts?.participating && counts.participating > 0
-          ? counts.participating.toString()
+        (counts?.participating ?? 0) > 0
+          ? String(counts?.participating)
           : undefined,
     },
     {
@@ -79,8 +79,8 @@ const getNavigationData = (counts?: {
       url: '/me/hackathons/submissions',
       icon: IconUsers,
       badge:
-        counts?.submissions && counts.submissions > 0
-          ? counts.submissions.toString()
+        (counts?.submissions ?? 0) > 0
+          ? String(counts?.submissions)
           : undefined,
     },
   ],
