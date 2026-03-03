@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { getOrganizationProfile } from '@/lib/api/organization';
 import OrgProfileClient from './org-profile-client';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://boundlessfi.xyz';
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://boundlessfi.xyz';
 
 interface OrgProfilePageProps {
   params: Promise<{ slug: string }>;
