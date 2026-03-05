@@ -18,6 +18,7 @@ import {
   updateUserSettings,
   UserAppearance,
   UserNotifications,
+  UserPreferences,
   UserPrivacy,
   UserSettings,
 } from '@/lib/api/auth';
@@ -215,6 +216,21 @@ const Settings = ({ visibleSections }: SettingsProps) => {
       toast.success('Appearance updated successfully');
     } catch {
       toast.error('Failed to update appearance');
+    } finally {
+      loadSettings();
+      setIsSaving(false);
+    }
+  };
+
+  const onSubmitPreferences = async (data: UserPreferences) => {
+    setIsSaving(true);
+    try {
+      await updateUserSettings({
+        preferences: data,
+      });
+      toast.success('Preferences updated successfully');
+    } catch {
+      toast.error('Failed to update preferences');
     } finally {
       loadSettings();
       setIsSaving(false);
@@ -678,7 +694,13 @@ const Settings = ({ visibleSections }: SettingsProps) => {
                     <FormItem>
                       <FormLabel className='text-zinc-300'>Language</FormLabel>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={async (value: string) => {
+                          field.onChange(value);
+                          await onSubmitPreferences({
+                            ...form.getValues('preferences'),
+                            language: value,
+                          });
+                        }}
                         value={field.value || undefined}
                       >
                         <FormControl>
@@ -732,7 +754,13 @@ const Settings = ({ visibleSections }: SettingsProps) => {
                     <FormItem>
                       <FormLabel className='text-zinc-300'>Timezone</FormLabel>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={async (value: string) => {
+                          field.onChange(value);
+                          await onSubmitPreferences({
+                            ...form.getValues('preferences'),
+                            timezone: value,
+                          });
+                        }}
                         defaultValue={field.value}
                       >
                         <FormControl>
