@@ -158,6 +158,8 @@ const LINK_TYPES = [
   { value: 'other', label: 'Other' },
 ];
 
+const OTHER_LINK_TYPES = ['demo', 'website', 'documentation', 'other'];
+
 const CATEGORIES = [
   'Web Development',
   'Mobile App',
@@ -423,7 +425,30 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
     });
   };
 
+  const canRemoveLink = (index: number): boolean => {
+    const links = form.getValues('links') || [];
+    const link = links[index];
+    if (!link) return true;
+
+    if (requireGithub && link.type === 'github') {
+      const otherGithubCount = links.filter(
+        (l, i) => i !== index && l.type === 'github'
+      ).length;
+      if (otherGithubCount === 0) return false;
+    }
+
+    if (requireOtherLinks && OTHER_LINK_TYPES.includes(link.type)) {
+      const otherLinkCount = links.filter(
+        (l, i) => i !== index && OTHER_LINK_TYPES.includes(l.type)
+      ).length;
+      if (otherLinkCount === 0) return false;
+    }
+
+    return true;
+  };
+
   const handleRemoveLink = (index: number) => {
+    if (!canRemoveLink(index)) return;
     const currentLinks = form.getValues('links') || [];
     form.setValue(
       'links',
@@ -535,7 +560,6 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
         return;
       }
 
-      const OTHER_LINK_TYPES = ['demo', 'website', 'documentation', 'other'];
       const hasValidOtherLink = links.some(
         link => OTHER_LINK_TYPES.includes(link.type) && isValidUrl(link.url)
       );
@@ -679,7 +703,6 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
         return;
       }
 
-      const OTHER_LINK_TYPES = ['demo', 'website', 'documentation', 'other'];
       const hasValidOtherLink = rawLinks.some(
         (link: { type: string; url: string }) =>
           OTHER_LINK_TYPES.includes(link.type) && isValidUrl(link.url)
@@ -893,7 +916,7 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel className='text-white'>
-                            Team Name *
+                            Team Name <span className='text-red-400'>*</span>
                           </FormLabel>
                           <FormControl>
                             <Input
@@ -1004,7 +1027,9 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
               name='projectName'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-white'>Project Name *</FormLabel>
+                  <FormLabel className='text-white'>
+                    Project Name <span className='text-red-400'>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input
                       key='projectName-input'
@@ -1027,7 +1052,9 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
               name='category'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-white'>Category *</FormLabel>
+                  <FormLabel className='text-white'>
+                    Category <span className='text-red-400'>*</span>
+                  </FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className='border-gray-700 bg-gray-800/50 text-white'>
@@ -1052,7 +1079,9 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
               name='description'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className='text-white'>Description *</FormLabel>
+                  <FormLabel className='text-white'>
+                    Description <span className='text-red-400'>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder='Describe your project in detail (minimum 50 characters)'
@@ -1153,7 +1182,10 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-white'>
-                    Demo Video URL{requireDemoVideo && ' *'}
+                    Demo Video URL
+                    {requireDemoVideo && (
+                      <span className='text-red-400'> *</span>
+                    )}
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -1207,7 +1239,9 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
                     <div className='flex items-center justify-between'>
                       <FormLabel className='text-white'>
                         Project Links
-                        {(requireGithub || requireOtherLinks) && ' *'}
+                        {(requireGithub || requireOtherLinks) && (
+                          <span className='text-red-400'> *</span>
+                        )}
                       </FormLabel>
                       <Button
                         type='button'
@@ -1266,15 +1300,17 @@ const SubmissionFormContent: React.FC<SubmissionFormContentProps> = ({
                               }
                               className='flex-1 border-gray-700 bg-gray-800/50 text-white placeholder:text-gray-500'
                             />
-                            <Button
-                              type='button'
-                              variant='ghost'
-                              size='sm'
-                              onClick={() => handleRemoveLink(index)}
-                              className='text-red-400 hover:bg-red-500/20'
-                            >
-                              <X className='h-4 w-4' />
-                            </Button>
+                            {canRemoveLink(index) && (
+                              <Button
+                                type='button'
+                                variant='ghost'
+                                size='sm'
+                                onClick={() => handleRemoveLink(index)}
+                                className='text-red-400 hover:bg-red-500/20'
+                              >
+                                <X className='h-4 w-4' />
+                              </Button>
+                            )}
                           </div>
                         ))}
                       </div>
