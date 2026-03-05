@@ -63,25 +63,16 @@ const settingsSchema = z.object({
 
 type SettingsFormData = z.infer<typeof settingsSchema>;
 
-export type SettingsSection =
-  | 'notifications'
-  | 'privacy'
-  | 'appearance'
-  | 'preferences';
-
 interface SettingsProps {
-  /** When set, only these sections are rendered (for use in separate tabs). */
-  visibleSections?: SettingsSection[];
+  visibleSections?: (
+    | 'notifications'
+    | 'privacy'
+    | 'appearance'
+    | 'preferences'
+  )[];
 }
 
 const Settings = ({ visibleSections }: SettingsProps) => {
-  const sections: SettingsSection[] = visibleSections ?? [
-    'notifications',
-    'privacy',
-    'appearance',
-    'preferences',
-  ];
-  const showAllSections = !visibleSections || visibleSections.length === 0;
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [settings, setSettings] = useState<UserSettings>({
@@ -251,7 +242,8 @@ const Settings = ({ visibleSections }: SettingsProps) => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-          {sections.includes('notifications') && (
+          {/* Notifications */}
+          {(!visibleSections || visibleSections.includes('notifications')) && (
             <Card className='rounded-xl border border-zinc-800 bg-zinc-900/30 p-4'>
               <div className='mb-4 flex items-center gap-3'>
                 <Bell className='h-5 w-5 text-zinc-400' />
@@ -326,7 +318,8 @@ const Settings = ({ visibleSections }: SettingsProps) => {
             </Card>
           )}
 
-          {sections.includes('privacy') && (
+          {/* Privacy */}
+          {(!visibleSections || visibleSections.includes('privacy')) && (
             <Card className='rounded-xl border border-zinc-800 bg-zinc-900/30 p-4'>
               <div className='mb-4 flex items-center gap-3'>
                 <Shield className='h-5 w-5 text-zinc-400' />
